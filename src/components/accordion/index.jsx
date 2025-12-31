@@ -10,7 +10,7 @@ export default function Accordion(){
 
     const [selected, setSelected] = useState(null);
     const [enableMultiSelection, setEnableMultiSelection] = useState(false);
-    const [multiple, sestMultiple] = useState({});
+    const [multiple, setMultiple] = useState({});
 
     function handleSingleSelection(getCurrentId){
     setSelected(getCurrentId === selected ? null : getCurrentId);
@@ -18,6 +18,12 @@ export default function Accordion(){
 
 function handleMultiSelection(getCurrentId){
     let cpyMultiple = [...multiple];
+    const findIndexOfCurrentId = cpyMultiple.indexOf(getCurrentId);
+
+    if (findIndexOfCurrentId === -1) cpyMultiple.push(getCurrentId);
+    else cpyMultiple.splice(findIndexOfCurrentId, 1);
+
+    setMultiple(cpyMultiple);
 }
 console.log(selected);
 
@@ -34,10 +40,14 @@ console.log(selected);
                             <span>+</span>
                             <div>
                                 {
-                                    selected === dataItem.id ? 
+                                    enableMultiSelection ? multiple.indexOf(dataItem.id) !== -1 && 
+                                    <div className="content">{dataItem.answer}</div> : selected === dataItem.id && <div className="content">{dataItem.answer}</div>
+                                }
+                                {/* {
+                                    selected === dataItem.id || multiple.indexOf(dataItem.id) !== -1 ? 
                                     <div className="content">{dataItem.answer}</div>
                                     : null
-                                }
+                                } */}
                             </div>
                         </div>
                     </div>))
